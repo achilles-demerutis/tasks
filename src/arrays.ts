@@ -23,11 +23,7 @@ export function bookEndList(numbers: number[]): number[] {
  * number has been tripled (multiplied by 3).
  */
 export function tripleNumbers(numbers: number[]): number[] {
-    let newNums = [];
-    for(let i = 0; i < numbers.length; i++){
-        newNums.push(numbers[i]*3);
-    }
-    return newNums;
+    return numbers.map((num: number): number => num * 3);
 }
 
 /**
@@ -35,16 +31,10 @@ export function tripleNumbers(numbers: number[]): number[] {
  * the number cannot be parsed as an integer, convert it to 0 instead.
  */
 export function stringsToIntegers(numbers: string[]): number[] {
-    let newNums = [];
-    for(let i = 0; i < numbers.length; i++){
-        let newInt = parseInt(numbers[i])
-        if(isNaN(newInt)){
-            newNums.push(0);
-        }else{
-            newNums.push(newInt);
-        }
-    }
-    return newNums;
+    return numbers.map((number: string): number => {
+        let parsed = parseInt(number);
+        return isNaN(parsed) ? 0 : parsed;
+    });
 }
 
 /**
@@ -75,13 +65,7 @@ export const shoutIfExclaiming = (messages: string[]): string[] => {
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    let count = 0;
-    for(let i = 0; i < words.length; i++){
-        if(words[i].length < 4){
-            count++;
-        }
-    }
-    return count;
+    return words.filter((word: string): boolean => word.length < 4).length;
 }
 
 /**
