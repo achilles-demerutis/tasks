@@ -5,15 +5,29 @@
  * the number twice.
  */
 export function bookEndList(numbers: number[]): number[] {
-    return numbers;
+    let newNums = [];
+    if(numbers.length === 0){
+        return [];
+    }else if(numbers.length === 1){
+        newNums.push(numbers[0])
+        newNums.push(numbers[0]);
+        return newNums;
+    }else{
+        newNums.push(numbers[0]);
+        newNums.push(numbers[numbers.length-1]);
+        return newNums;
+    }
 }
-
 /**
  * Consume an array of numbers, and return a new array where each
  * number has been tripled (multiplied by 3).
  */
 export function tripleNumbers(numbers: number[]): number[] {
-    return numbers;
+    let newNums = [];
+    for(let i = 0; i < numbers.length; i++){
+        newNums.push(numbers[i]*3);
+    }
+    return newNums;
 }
 
 /**
@@ -21,7 +35,16 @@ export function tripleNumbers(numbers: number[]): number[] {
  * the number cannot be parsed as an integer, convert it to 0 instead.
  */
 export function stringsToIntegers(numbers: string[]): number[] {
-    return [];
+    let newNums = [];
+    for(let i = 0; i < numbers.length; i++){
+        let newInt = parseInt(numbers[i])
+        if(isNaN(newInt)){
+            newNums.push(0);
+        }else{
+            newNums.push(newInt);
+        }
+    }
+    return newNums;
 }
 
 /**
@@ -32,7 +55,10 @@ export function stringsToIntegers(numbers: string[]): number[] {
  */
 // Remember, you can write functions as lambdas too! They work exactly the same.
 export const removeDollars = (amounts: string[]): number[] => {
-    return [];
+    return amounts.map(amt => {
+        let parsed = parseInt(amt[0] === "$" ? amt.slice(1) : amt)
+        return isNaN(parsed) ? 0 : parsed;
+    });
 };
 
 /**
@@ -41,15 +67,21 @@ export const removeDollars = (amounts: string[]): number[] => {
  * in question marks ("?").
  */
 export const shoutIfExclaiming = (messages: string[]): string[] => {
-    return [];
-};
+    return messages.filter(message=>!message.endsWith("?")).map(message=>message.endsWith("!") ? message.toUpperCase(): message);   //bit confusing at first, but filters out questions
+};                                                                                                                                  //and then maps messages to uppercase
 
 /**
  * Consumes an array of words and returns the number of words that are LESS THAN
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    return 0;
+    let count = 0;
+    for(let i = 0; i < words.length; i++){
+        if(words[i].length < 4){
+            count++;
+        }
+    }
+    return count;
 }
 
 /**
@@ -58,7 +90,7 @@ export function countShortWords(words: string[]): number {
  * then return true.
  */
 export function allRGB(colors: string[]): boolean {
-    return false;
+    return colors.every((colors: string): boolean => colors === "red" || colors === "green" || colors === "blue");
 }
 
 /**
@@ -69,7 +101,12 @@ export function allRGB(colors: string[]): boolean {
  * And the array [] would become "0=0".
  */
 export function makeMath(addends: number[]): string {
-    return "";
+    if(addends.length === 0){
+        return "0=0";
+    }
+    let sum = addends.reduce((addends: number, num: number) => addends + num, 0);
+    let returnStr = addends.join("+")
+    return sum + "=" + returnStr;
 }
 
 /**
@@ -82,5 +119,13 @@ export function makeMath(addends: number[]): string {
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
 export function injectPositive(values: number[]): number[] {
-    return [];
+    let stopIndex = values.findIndex((values: number): boolean => values < 0);
+    if(stopIndex === -1){
+        let total = values.reduce((value, num) => value+num, 0);
+        return [...values, total];                                  //just learned how to do this (unpacks values and adds total to the end)
+    }
+    let preNegative = values.slice(0, stopIndex).reduce((value, num) => value+num, 0);
+    return [...values.slice(0, stopIndex+1),preNegative,...values.slice(stopIndex+1)];     //once again kind of confusing, but unpacks
+                                                                                            //values up until the negative, then the negative, and
+                                                                                            //then the values after the negative
 }
