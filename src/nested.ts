@@ -1,6 +1,6 @@
 import { Answer } from "./interfaces/answer";
 import { Question, QuestionType } from "./interfaces/question";
-import { makeBlankQuestion } from "./objects";
+import { duplicateQuestion, makeBlankQuestion } from "./objects";
 
 /**
  * Consumes an array of questions and returns a new array with only the questions
@@ -150,7 +150,7 @@ export function renameQuestionById(
     targetId: number,
     newName: string,
 ): Question[] {
-    return [];
+    return questions.map((question) => question.id === targetId ? {...question, name: newName}: question);
 }
 
 /***
@@ -165,7 +165,8 @@ export function changeQuestionTypeById(
     targetId: number,
     newQuestionType: QuestionType,
 ): Question[] {
-    return [];
+    return questions.map((question) => question.id !== targetId ? question: 
+    {...question, type: newQuestionType, options: newQuestionType !== "multiple_choice_question" ? []: question.options});
 }
 
 /**
@@ -184,7 +185,8 @@ export function editOption(
     targetOptionIndex: number,
     newOption: string,
 ): Question[] {
-    return [];
+    return questions.map((question) => question.id !== targetId ? question: 
+    {...question, options: targetOptionIndex === -1 ? [...question.options, newOption]: question.options.map((option, index) => index === targetOptionIndex ? newOption : option,)});
 }
 
 /***
@@ -198,5 +200,9 @@ export function duplicateQuestionInArray(
     targetId: number,
     newId: number,
 ): Question[] {
-    return [];
+    let targetIndex = questions.findIndex((question) => question.id === targetId);
+    if (targetIndex === -1) return questions;
+    let original = questions[targetIndex];
+    let copy = duplicateQuestion(newId, original);
+    return [...questions.slice(0, targetIndex + 1), copy, ...questions.slice(targetIndex + 1),];
 }
